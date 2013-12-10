@@ -5,6 +5,10 @@ scalpy
 
 Extract information about issues from various Issue management suites.
 
+Current support:
+
+ - Github Issues
+
 ## License
 
 (The MIT License)
