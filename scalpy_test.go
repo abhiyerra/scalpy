@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func TestScalp_good(t *testing.T) {
+func TestScalpGoodUrl(t *testing.T) {
 	url := "https://github.com/abhiyerra/feedbackjs/issues/2"
 	scalp := ScalpUrl(url)
 
@@ -25,7 +25,7 @@ func TestScalp_good(t *testing.T) {
 	}
 }
 
-func TestScalp_badHost(t *testing.T) {
+func TestScalpBadUrl(t *testing.T) {
 	url := "https://abhiyerra.com/asdf"
 	scalp := ScalpUrl(url)
 
@@ -34,7 +34,7 @@ func TestScalp_badHost(t *testing.T) {
 	}
 }
 
-func TestScalp_badPath(t *testing.T) {
+func TestScalpBadPath(t *testing.T) {
 	url := "https://github.com/asdf"
 	scalp := ScalpUrl(url)
 
