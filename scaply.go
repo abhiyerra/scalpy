@@ -20,6 +20,7 @@ type Scalp struct {
 
 	HostingService Hosting
 
+	Project string
 	Repo    string
 	IssueId string
 }
@@ -49,15 +50,16 @@ func ScalpUrl(url_str string) (scalp *Scalp) {
 		return nil
 	}
 
-	re := regexp.MustCompile("^/(.*)/issues/([0-9]+)")
+	re := regexp.MustCompile("^/(.*)/(.*)/issues/([0-9]+)")
 	matches := re.FindStringSubmatch(url.Path)
 
 	if matches == nil {
 		log.Printf("Invalid path %v\n", matches)
 		return nil
 	} else {
-		scalp.Repo = matches[1]
-		scalp.IssueId = matches[2]
+		scalp.Project = matches[1]
+		scalp.Repo = matches[2]
+		scalp.IssueId = matches[3]
 	}
 
 	return scalp

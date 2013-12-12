@@ -16,7 +16,11 @@ func TestScalpGoodUrl(t *testing.T) {
 		t.Fatal("Invalid hosting service.")
 	}
 
-	if scalp.Repo != "abhiyerra/feedbackjs" {
+	if scalp.Project != "abhiyerra" {
+		t.Fatal("Invalid repo.")
+	}
+
+	if scalp.Repo != "feedbackjs" {
 		t.Fatal("Invalid repo.")
 	}
 
