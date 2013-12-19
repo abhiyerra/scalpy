@@ -46,3 +46,12 @@ func TestScalpBadPath(t *testing.T) {
 		t.Fatal("Somehow parsed the url correctly")
 	}
 }
+
+func TestScalpGithubIssue(t *testing.T) {
+	url := "https://github.com/abhiyerra/feedbackjs/issues/2"
+	scalp := ScalpUrl(url)
+
+	if issue := scalp.GithubIssue(); issue == nil {
+		t.Fatal("Couldn't get the correct github issue")
+	}
+}

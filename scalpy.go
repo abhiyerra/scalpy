@@ -16,7 +16,7 @@ const (
 
 type Scalp struct {
 	OriginalUrl string
-	Url         url.URL
+	Url         *url.URL
 
 	HostingService Hosting
 
@@ -25,33 +25,43 @@ type Scalp struct {
 	IssueId string
 }
 
-func (s *Scalp) GithubIssue() *octokit.Issue {
+func (s *Scalp) GithubIssue() (issue *octokit.Issue) {
 	client := octokit.NewClient(nil)
-	issue_service := client.Issues(&s.Url)
-	issue, _ := issue_service.One()
+	url, _ := octokit.RepoIssuesURL.Expand(octokit.M{
+		"owner":  s.Project,
+		"repo":   s.Repo,
+		"number": s.IssueId,
+	})
 
-	return issue
+	issue, _ = client.Issues(url).One()
+
+	log.Printf("url %s %v", s.Url, issue)
+
+	return
 }
 
 func ScalpUrl(url_str string) (scalp *Scalp) {
-	scalp = &Scalp{}
-	scalp.OriginalUrl = url_str
+	scalp = &Scalp{
+		OriginalUrl: url_str,
+	}
 
-	url, err := url.Parse(url_str)
+	var err error
+	scalp.Url, err = url.Parse(url_str)
+
 	if err != nil {
 		log.Printf("Can't parse url %v\n", err)
 		return nil
 	}
 
-	if strings.Contains(url.Host, "github.com") {
+	if strings.Contains(scalp.Url.Host, "github.com") {
 		scalp.HostingService = Github
 	} else {
-		log.Printf("Invalid service: %s\n", url.Host)
+		log.Printf("Invalid service: %s\n", scalp.Url.Host)
 		return nil
 	}
 
 	re := regexp.MustCompile("^/(.*)/(.*)/issues/([0-9]+)")
-	matches := re.FindStringSubmatch(url.Path)
+	matches := re.FindStringSubmatch(scalp.Url.Path)
 
 	if matches == nil {
 		log.Printf("Invalid path %v\n", matches)
